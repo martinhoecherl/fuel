@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import re
 
+st.title('Fuel consumption evaluation')
 uploaded_file = st.file_uploader('Select files', accept_multiple_files=True, type='pdf')
 
 if str(uploaded_file) != '[]':
