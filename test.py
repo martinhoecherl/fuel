@@ -24,6 +24,6 @@ if str(uploaded_file) != '[]':
             x_num = re.findall('[0-9]+', pdf_read[x.end(): x.end()+6])
             df[i, 2] = float(x_num[0])
 
-    df = pd.DataFrame(df, columns=['Diesel consumption', 'cumulative Diesel consumption'])
+    df = pd.DataFrame(df, columns=['Document name', 'Diesel consumption', 'cumulative Diesel consumption'])
 
     st.table(df)
