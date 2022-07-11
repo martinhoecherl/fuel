@@ -3,32 +3,16 @@ from pdfminer.high_level import extract_text
 import pandas as pd
 import numpy as np
 import re
-import os
-import tkinter as tk
-from tkinter import filedialog
 
-root = tk.Tk()
-root.withdraw()
+uploaded_file = st.file_uploader('Select files', accept_multiple_files=True, type='pdf')
 
-root.wm_attributes('-topmost', 1)
+if str(uploaded_file) != '[]':
 
-st.title('Fuel consumption DDR evaluation')
-clicked = st.button('Select Folder')
+    df = np.zeros((len(uploaded_file), 2)).astype(object)
 
-if clicked:
+    for i in range(len(uploaded_file)):
 
-    dirname = filedialog.askdirectory(master=root)
-
-    st.code(dirname)
-
-    files = os.listdir(dirname)
-
-    df = np.zeros((len(files), 2)).astype(object)
-
-    for i in range(len(files)):
-
-        file_path = dirname + r'\\' + files[i]
-        pdf_read = extract_text(file_path)
+        pdf_read = extract_text(uploaded_file[i])
 
         if str(re.search(rf"(Dieselverbrauch: )", pdf_read)) != 'None' and re.findall('[0-9]+', pdf_read[re.search(rf"(Dieselverbrauch: )", pdf_read).end():re.search(rf"(Dieselverbrauch: )", pdf_read).end() + 5]) != re.findall('[0-9]+', pdf_read[re.search(rf"(kum. Dieselverbrauch: )", pdf_read).end():re.search(rf"(kum. Dieselverbrauch: )", pdf_read).end()+6]):
             y = re.search(rf"(Dieselverbrauch: )", pdf_read)
@@ -42,5 +26,3 @@ if clicked:
     df = pd.DataFrame(df, columns=['Diesel consumption', 'cumulative Diesel consumption'])
 
     st.table(df)
-
-
